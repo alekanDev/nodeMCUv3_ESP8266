@@ -58,7 +58,6 @@ int otaMode() {
 };
 
 int proximControl() {
-
   obstacleValue = digitalRead(pinProxim);
 
   if (obstacleValue == 0) {
