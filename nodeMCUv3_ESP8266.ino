@@ -12,6 +12,9 @@ byte cont = 0;
 byte max_intentos = 50;
 const uint32_t connectTimeoutMS = 5000;
 
+int pinProxim = 0;
+int obstacleValue = 0;
+
 
 int wifiConnection() {
   WiFi.mode(WIFI_STA);
@@ -54,13 +57,28 @@ int otaMode() {
   return 1;
 };
 
+int proximControl() {
+
+  obstacleValue = digitalRead(pinProxim);
+
+  if (obstacleValue == 0) {
+        Serial.println("obstacleDetected!");
+      }
+  delay(500);
+  return 1;
+};
+
 void setup() {
   Serial.begin(9600);
 
   otaMode();         // INIT OTA_MODE
   wifiConnection();  // INIT WIFI_CONNECTION
+
+  pinMode(pinProxim, INPUT);
+
 }
 
 void loop() {
   ArduinoOTA.handle();
+  proximControl();
 }
