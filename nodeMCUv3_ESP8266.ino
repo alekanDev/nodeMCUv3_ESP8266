@@ -1,4 +1,3 @@
-
 //PROJECT BASE TO NODEMCU V3 (ESP8266)
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
@@ -6,29 +5,25 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
+#include "sensitiveData.h"
+
 ESP8266WiFiMulti wifiMulti;
 byte cont = 0;
 byte max_intentos = 50;
 const uint32_t connectTimeoutMS = 5000;
 
 
-void setup() {
-  Serial.begin(9600);
-  Serial.println("\n");
+int wifiConnection() {
+  WiFi.mode(WIFI_STA);
+  wifiMulti.addAP(SSID_company, PASS_company);
+  wifiMulti.addAP(SSID_home, PASS_home);
+  wifiMulti.addAP(SSID_mobile, PASS_mobile);
 
-  wifiMulti.addAP("SSID", "PASSWORD*");
-
-  while (WiFi.status() != WL_CONNECTED and cont < max_intentos) {
+  while (WiFi.waitForConnectResult() != WL_CONNECTED && cont < max_intentos) {
     cont++;
     delay(500);
     Serial.print(".");
   }
-
-  ArduinoOTA.setHostname("HOSTNAME");  // IS THE BOARD NAME
-  ArduinoOTA.setPassword("PASSWORD");  // IS SECRET PASS TO CONNECTION
-  ArduinoOTA.setPort("PORT"); // PORT IS NUMERIC VALUE
-
-  ArduinoOTA.begin();
 
   Serial.println();
 
@@ -46,6 +41,24 @@ void setup() {
     Serial.println("Error en conexión...");
     Serial.println("-------------------------------------------");
   }
+  return 1;
+};
+
+int otaMode() {
+  Serial.println("\n");
+  ArduinoOTA.setHostname("nodeMCUv3");  // IS THE BOARD NAME
+  ArduinoOTA.setPassword("admin");      // IS SECRET PASS TO CONNECTION
+  ArduinoOTA.setPort(8266);             // PORT IS NUMERIC VALUE
+
+  ArduinoOTA.begin();
+  return 1;
+};
+
+void setup() {
+  Serial.begin(9600);
+
+  otaMode();         // INIT OTA_MODE
+  wifiConnection();  // INIT WIFI_CONNECTION
 }
 
 void loop() {
