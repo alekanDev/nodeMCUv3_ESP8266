@@ -46,9 +46,9 @@ int wifiConnection() {
 
 int otaMode() {
   Serial.println("\n");
-  ArduinoOTA.setHostname("nodeMCUv3");  // IS THE BOARD NAME
-  ArduinoOTA.setPassword("admin");      // IS SECRET PASS TO CONNECTION
-  ArduinoOTA.setPort(8266);             // PORT IS NUMERIC VALUE
+  ArduinoOTA.setHostname(OTA_host);  // IS THE BOARD NAME
+  ArduinoOTA.setPassword(OTA_pass);  // IS SECRET PASS TO CONNECTION
+  ArduinoOTA.setPort(OTA_port);      // PORT IS NUMERIC VALUE
 
   ArduinoOTA.begin();
   return 1;
